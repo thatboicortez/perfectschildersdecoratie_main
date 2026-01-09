@@ -1,203 +1,359 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <title>Perfect Schilders & Decoratie</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #0f0f0f;
-      color: #ffffff;
+    :root{
+      --bg:#0f0f0f;
+      --panel:#111;
+      --panel2:#171717;
+      --text:#fff;
+      --muted:#bbb;
+      --link:#4da3ff;
+      --radius:16px;
     }
-    header {
-      padding: 60px 20px;
-      text-align: center;
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header{
+      padding:60px 20px;
+      text-align:center;
       background: linear-gradient(135deg, #1f1f1f, #111);
     }
-    header h1 {
-      font-size: 42px;
-      margin-bottom: 10px;
+    header h1{
+      font-size:42px;
+      margin:0 0 10px 0;
+      letter-spacing: 0.3px;
     }
-    header p {
-      color: #bbb;
-      font-size: 18px;
+    header p{
+      margin:0;
+      color: var(--muted);
+      font-size:18px;
     }
-    section {
-      padding: 60px 20px;
-      max-width: 1100px;
-      margin: auto;
+
+    section{
+      padding:60px 20px;
+      max-width:1100px;
+      margin:auto;
     }
-    h2 {
-      text-align: center;
-      margin-bottom: 40px;
-      font-size: 32px;
+
+    h2{
+      text-align:center;
+      margin:0 0 40px 0;
+      font-size:32px;
     }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+
+    /* ===== Папки (Windows-like cards) ===== */
+    #folders.folders-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:22px;
+      max-width: 1000px;
+      margin: 0 auto;
     }
-    .gallery img {
-      width: 100%;
+
+    .folder-card{
+      cursor:pointer;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      overflow:hidden;
+      transition: transform .18s ease, border-color .18s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .folder-card:hover{
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,0.16);
+    }
+
+    .folder-thumb{
+      width:100%;
+      aspect-ratio: 16/10; /* красивое превью как на твоём примере */
+      background: #0b0b0b;
+      overflow:hidden;
+      position:relative;
+    }
+    .folder-thumb img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      filter: saturate(1.05) contrast(1.05);
+      transform: scale(1.02);
+    }
+
+    .folder-bar{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding: 12px 14px;
+      background: rgba(0,0,0,0.35);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(6px);
+    }
+    .folder-icon{
+      width:18px;
+      height:18px;
+      display:inline-block;
+    }
+    .folder-title{
+      font-size:16px;
+      color:#fff;
+      font-weight:600;
+      letter-spacing:0.2px;
+    }
+
+    /* ===== Картинки внутри папки (маленькие квадраты 3 в ряд) ===== */
+    #images.images-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:16px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .img-tile{
+      border-radius: 14px;
+      overflow:hidden;
+      background: #0b0b0b;
+      border: 1px solid rgba(255,255,255,0.08);
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .img-tile:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.16);
+    }
+    .img-tile img{
+      width:100%;
+      aspect-ratio: 1/1;          /* КВАДРАТ */
+      object-fit: cover;          /* не растягивает */
+      display:block;
+    }
+
+    /* ===== Кнопка Back ===== */
+    .center-actions{
+      text-align:center;
+      margin-top:28px;
+    }
+    #backBtn{
+      display:inline-block;
+      background: rgba(255,255,255,0.08);
+      color:#fff;
+      border: 1px solid rgba(255,255,255,0.14);
+      padding:10px 16px;
       border-radius: 12px;
-      transition: transform 0.3s ease;
+      cursor:pointer;
+      font-size:16px;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
     }
-    .gallery img:hover {
-      transform: scale(1.05);
-      .folder {
-  padding: 40px;
-  background: #1a1a1a;
-  border-radius: 14px;
-  font-size: 22px;
-  cursor: pointer;
-  text-align: center;
-  transition: 0.3s;
-}
-
-.folder:hover {
-  background: #2a2a2a;
-  transform: scale(1.05);
-}
-    .contacts {
-      text-align: center;
-      font-size: 18px;
+    #backBtn:hover{
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.22);
+      transform: translateY(-1px);
     }
-    .contacts a {
-      display: inline-block;
-      margin: 10px 15px;
-      color: #4da3ff;
-      text-decoration: none;
+
+    /* ===== Контакты ===== */
+    .contacts{
+      text-align:center;
+      font-size:18px;
     }
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: #666;
-      font-size: 14px;
+    .contacts a{
+      display:inline-block;
+      margin:10px 15px;
+      color: var(--link);
+      text-decoration:none;
     }
-      /* === Gallery folders grid === */
+    .contacts a:hover{
+      text-decoration: underline;
+    }
 
-.folders-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 в ряд */
-  gap: 30px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
+    footer{
+      text-align:center;
+      padding:30px;
+      color:#666;
+      font-size:14px;
+    }
 
-.folder-card {
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
+    /* ===== Лайтбокс ===== */
+    .lightbox{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.82);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 20px;
+      z-index: 9999;
+    }
+    .lightbox.open{ display:flex; }
+    .lightbox img{
+      max-width: 95vw;
+      max-height: 90vh;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    }
 
-.folder-card:hover {
-  transform: scale(1.04);
-}
-
-.folder-thumb {
-  width: 100%;
-  aspect-ratio: 1 / 1; /* КВАДРАТ */
-  overflow: hidden;
-  border-radius: 14px;
-  background: #111;
-}
-
-.folder-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* НЕ растягивается */
-}
-
-.folder-title {
-  margin-top: 12px;
-  font-size: 18px;
-  color: #fff;
-  text-align: center;
-}
-
+    /* ===== Адаптив ===== */
+    @media (max-width: 900px){
+      #folders.folders-grid{ grid-template-columns: repeat(2, 1fr); }
+      #images.images-grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px){
+      #folders.folders-grid{ grid-template-columns: 1fr; }
+      #images.images-grid{ grid-template-columns: repeat(2, 1fr); }
+      header h1{ font-size: 34px; }
+    }
   </style>
 </head>
-<body>
 
+<body>
   <header>
     <h1>Perfect Schilders & Decoratie</h1>
     <p>Creative Portfolio</p>
   </header>
 
   <section>
-  <h2 id="gallery-title">Gallery</h2>
+    <h2 id="gallery-title">Gallery</h2>
 
-  <!-- Folders -->
-<div id="folders" class="folders-grid">
+    <!-- Папки -->
+    <div id="folders" class="folders-grid"></div>
 
-  <div class="folder-card" onclick="openFolder('wallpapers')">
-    <div class="folder-thumb">
-      <img src="gallery/wallpapers/photo_2026-01-09_14-13-23.jpg" alt="Wallpapers preview">
+    <!-- Картинки -->
+    <div id="images" class="images-grid" style="display:none;"></div>
+
+    <div class="center-actions">
+      <button id="backBtn" onclick="goBack()" style="display:none;">← Back</button>
     </div>
-    <div class="folder-title">Wallpapers</div>
-  </div>
+  </section>
 
-  <!-- Добавишь потом другие папки так же:
-  <div class="folder-card" onclick="openFolder('anime')">
-    <div class="folder-thumb">
-      <img src="gallery/anime/preview.jpg" alt="Anime preview">
+  <section>
+    <h2>Contacts</h2>
+    <div class="contacts">
+      <a href="mailto:youremail.com">Email</a>
+      <a href="https://t.me/username" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
     </div>
-    <div class="folder-title">Anime</div>
+  </section>
+
+  <!-- Лайтбокс -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="preview">
   </div>
-  -->
 
-</div>
+  <script>
+    /**
+     * ДОБАВЛЯЕШЬ ПАПКИ ТОЛЬКО ЗДЕСЬ:
+     *  - title: название папки
+     *  - preview: картинка-превью на папке
+     *  - images: список картинок внутри папки
+     */
+    const folders = {
+      wallpapers: {
+        title: "Wallpapers",
+        preview: "gallery/wallpapers/photo_2026-01-09_14-13-23.jpg",
+        images: [
+          "gallery/wallpapers/photo_2026-01-09_14-13-23.jpg"
+        ]
+      }
 
+      // Пример второй папки:
+      // anime: {
+      //   title: "Anime",
+      //   preview: "gallery/anime/preview.jpg",
+      //   images: [
+      //     "gallery/anime/1.jpg",
+      //     "gallery/anime/2.jpg"
+      //   ]
+      // }
+    };
 
-  <!-- Images -->
-  <div id="images" class="gallery" style="display:none;"></div>
+    const foldersDiv = document.getElementById("folders");
+    const imagesDiv  = document.getElementById("images");
+    const backBtn    = document.getElementById("backBtn");
+    const titleEl    = document.getElementById("gallery-title");
 
-  <div style="text-align:center; margin-top:30px;">
-    <button id="backBtn" onclick="goBack()" style="display:none;">← Back</button>
-  </div>
-</section>
+    function folderCardHTML(key, obj){
+      return `
+        <div class="folder-card" onclick="openFolder('${key}')">
+          <div class="folder-thumb">
+            <img src="${obj.preview}" alt="${obj.title} preview">
+          </div>
+          <div class="folder-bar">
+            <svg class="folder-icon" viewBox="0 0 24 24" fill="none">
+              <path d="M3 7.5C3 6.12 4.12 5 5.5 5H9.2c.54 0 1.06.21 1.44.59l1.1 1.1c.38.38.9.59 1.44.59H18.5C19.88 7.28 21 8.4 21 9.78V17.5C21 18.88 19.88 20 18.5 20H5.5C4.12 20 3 18.88 3 17.5V7.5Z"
+                    stroke="rgba(255,255,255,0.9)" stroke-width="1.5" />
+            </svg>
+            <div class="folder-title">${obj.title}</div>
+          </div>
+        </div>
+      `;
+    }
 
+    function renderFolders(){
+      foldersDiv.innerHTML = Object.entries(folders)
+        .map(([key, obj]) => folderCardHTML(key, obj))
+        .join("");
+    }
 
- <section>
-  <h2>Contacts</h2>
-  <div class="contacts">
-    <a href="mailto:youremail.com">Email</a>
-    <a href="https://t.me/username" target="_blank">Telegram</a>
-    <a href="https://instagram.com" target="_blank">Instagram</a>
-  </div>
-</section>
+    function openFolder(key){
+      const f = folders[key];
+      if(!f) return;
 
-<script>
-  const data = {
-    wallpapers: [
-      "gallery/wallpapers/photo_2026-01-09_14-13-23.jpg"
-    ]
-  };
+      foldersDiv.style.display = "none";
+      imagesDiv.style.display  = "grid";
+      backBtn.style.display    = "inline-block";
+      titleEl.innerText        = f.title;
 
-  function openFolder(name) {
-    document.getElementById("folders").style.display = "none";
-    document.getElementById("images").style.display = "grid";
-    document.getElementById("backBtn").style.display = "inline-block";
-    document.getElementById("gallery-title").innerText = "Wallpapers";
+      imagesDiv.innerHTML = "";
+      f.images.forEach(src => {
+        const tile = document.createElement("div");
+        tile.className = "img-tile";
+        tile.innerHTML = `<img src="${src}" alt="">`;
+        tile.onclick = () => openLightbox(src);
+        imagesDiv.appendChild(tile);
+      });
+    }
 
-    const imagesDiv = document.getElementById("images");
-    imagesDiv.innerHTML = "";
+    function goBack(){
+      foldersDiv.style.display = "grid";
+      imagesDiv.style.display  = "none";
+      backBtn.style.display    = "none";
+      titleEl.innerText        = "Gallery";
+      imagesDiv.innerHTML = "";
+    }
 
-    data[name].forEach(src => {
-      const img = document.createElement("img");
+    function openLightbox(src){
+      const lb = document.getElementById("lightbox");
+      const img = document.getElementById("lightboxImg");
       img.src = src;
-      imagesDiv.appendChild(img);
-    });
-  }
+      lb.classList.add("open");
+    }
 
-  function goBack() {
-    document.getElementById("folders").style.display = "grid";
-    document.getElementById("images").style.display = "none";
-    document.getElementById("backBtn").style.display = "none";
-    document.getElementById("gallery-title").innerText = "Gallery";
-  }
-</script>
+    function closeLightbox(){
+      const lb = document.getElementById("lightbox");
+      const img = document.getElementById("lightboxImg");
+      lb.classList.remove("open");
+      img.src = "";
+    }
+
+    // Esc закрывает лайтбокс
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") closeLightbox();
+    });
+
+    renderFolders();
+  </script>
 
 </body>
 </html>
