@@ -24,6 +24,99 @@
     }
 
     *{ box-sizing:border-box; }
+    
+    /* ===== АНИМАЦИИ ПАПОК ===== */
+
+/* базовая “пружина” */
+.folder-card{
+  will-change: transform, box-shadow, border-color;
+  transform: translateY(0) scale(1);
+}
+
+/* эффект появления (stagger) */
+.folder-card{
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  animation: folderIn 0.7s cubic-bezier(.2,.9,.2,1) forwards;
+  animation-delay: calc(var(--i, 0) * 0.08s);
+}
+
+@keyframes folderIn{
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* hover: аккуратный “подъём” + тень */
+.folder-card:hover{
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.55);
+}
+
+/* мягкий наклон на больших экранах */
+@media (hover: hover){
+  .folder-card:hover{
+    transform: translateY(-6px) scale(1.01) rotateX(2deg);
+  }
+}
+
+/* “shine” блик по превью */
+.folder-thumb{
+  position: relative;
+}
+
+.folder-thumb::after{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255,255,255,0.18) 45%,
+    transparent 60%
+  );
+  transform: translateX(-60%) rotate(10deg);
+  opacity: 0;
+  pointer-events:none;
+}
+
+.folder-card:hover .folder-thumb::after{
+  opacity: 1;
+  animation: shine 0.9s ease forwards;
+}
+
+@keyframes shine{
+  from { transform: translateX(-60%) rotate(10deg); }
+  to   { transform: translateX(60%) rotate(10deg); }
+}
+
+/* иконка папки: лёгкий “поп” */
+.folder-icon{
+  transition: transform .25s ease, opacity .25s ease;
+  opacity: 0.9;
+}
+.folder-card:hover .folder-icon{
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+/* панель снизу: чуть подсвечивать */
+.folder-bar{
+  transition: background .25s ease, border-color .25s ease;
+}
+.folder-card:hover .folder-bar{
+  background: rgba(0,0,0,0.45);
+  border-color: rgba(255,255,255,0.14);
+}
+
+/* уважение к настройке “reduce motion” */
+@media (prefers-reduced-motion: reduce){
+  .folder-card,
+  .folder-thumb::after{
+    animation: none !important;
+    transition: none !important;
+  }
+  .folder-card{ opacity:1; transform:none; }
+}
+
 
     body{
       margin:0;
