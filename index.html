@@ -547,6 +547,9 @@ const folders = {
   }
 };
 
+const lb = document.getElementById("lightbox");
+const lbImg = document.getElementById("lightboxImg");
+let lightboxPushed = false; // чтобы не пушить историю много раз
 const foldersDiv = document.getElementById("folders");
 const imagesDiv  = document.getElementById("images");
 const backBtn    = document.getElementById("backBtn");
@@ -649,17 +652,31 @@ function showLightboxImage(){
   updateLightboxUI();
 }
 
-function openLightboxByIndex(list, idx){
-  currentList = Array.isArray(list) ? list : [];
-  currentIndex = Math.max(0, Math.min(idx || 0, currentList.length - 1));
-
-  showLightboxImage();
+function openLightbox(src){
+  lbImg.src = src;
   lb.classList.add("open");
+
+  // ✅ добавляем "шаг" в историю, чтобы Back сначала закрыл фото
+  if (!lightboxPushed) {
+    history.pushState({ modal: "lightbox" }, "");
+    lightboxPushed = true;
+  }
 }
 
-function closeLightbox(){
+function closeLightbox(fromPopstate = false){
   lb.classList.remove("open");
   lbImg.src = "";
+
+  // ✅ если закрываем кликом по X/фону — откатываем этот шаг истории
+  if (!fromPopstate && lightboxPushed) {
+    lightboxPushed = false;
+    history.back();
+  }
+
+  // ✅ если закрываем из popstate — просто сбрасываем флаг
+  if (fromPopstate) {
+    lightboxPushed = false;
+  }
 }
 
 function prevPhoto(){
@@ -716,12 +733,22 @@ lb.addEventListener("touchend", (e) => {
   else nextPhoto();
 }, { passive: true });
 
-/* ===== Browser Back/Forward on folders ===== */
+/* ===== Browser Back/Forward ===== */
+
+// папки (hash)
 window.addEventListener("hashchange", handleRoute);
 
-/* init */
+// ⬅️ Back в браузере: если открыт лайтбокс — закрываем ТОЛЬКО его
+window.addEventListener("popstate", () => {
+  if (document.getElementById("lightbox").classList.contains("open")) {
+    closeLightbox();
+  }
+});
+
+/* ===== init ===== */
 renderFolders();
 handleRoute();
+
 </script>
 
 </body>
