@@ -125,7 +125,7 @@
       margin:0 auto;
     }
 
-    /* ===== FOLDER CARD (FIXED VERSION) ===== */
+    /* ===== FOLDER CARD ===== */
     .folder-card{
       cursor:pointer;
       background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
@@ -285,13 +285,14 @@
     /* contacts */
     .contacts{text-align:center;font-size:18px;}
     .contacts a{
-  margin: 10px 28px;
-  color: rgba(255,255,255,0.45);
-}
-
-.contacts a:hover{
-  color: rgba(255,255,255,0.7);
-}
+      margin: 10px 28px;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+    }
+    .contacts a:hover{
+      color: rgba(255,255,255,0.7);
+      text-decoration: underline;
+    }
 
     /* responsive */
     @media(max-width:900px){
@@ -302,31 +303,117 @@
       #folders.folders-grid{grid-template-columns:1fr;}
       header h1{font-size:34px;}
     }
-/* ===== LIGHTBOX (ИСПРАВЛЕНИЕ) ===== */
-.lightbox{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.82);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  z-index: 9999; /* 🔥 ПОВЕРХ ВСЕГО */
-}
 
-.lightbox.open{
-  display: flex;
-}
+    /* ===== LIGHTBOX ===== */
+    .lightbox{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.82);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 9999;
+      touch-action: pan-y; /* чтобы свайп по X работал нормально */
+    }
+    .lightbox.open{ display:flex; }
 
-.lightbox img{
-  max-width: 95vw;
-  max-height: 90vh;
-  object-fit: contain;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-}
+    .lightbox img{
+      max-width: 95vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      user-select: none;
+      -webkit-user-drag: none;
+    }
 
+    /* ===== LIGHTBOX UI (стрелки / крест / счетчик) ===== */
+    .lb-btn{
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+      color: rgba(255,255,255,0.92);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease, opacity .15s ease;
+      z-index: 10000;
+    }
+
+    .lb-btn:hover{
+      background: rgba(0,0,0,0.5);
+      border-color: rgba(255,255,255,0.28);
+      transform: translateY(-1px);
+    }
+
+    .lb-btn:active{
+      transform: scale(0.98);
+    }
+
+    .lb-btn svg{
+      width: 22px;
+      height: 22px;
+      display: block;
+    }
+
+    .lb-close{
+      top: 16px;
+      left: 16px;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+    }
+
+    .lb-prev{
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .lb-next{
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .lb-prev:hover, .lb-next:hover{
+      transform: translateY(-50%) translateY(-1px);
+    }
+
+    .lb-btn[disabled]{
+      opacity: 0.25;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .lb-counter{
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+      color: rgba(255,255,255,0.85);
+      font-size: 14px;
+      letter-spacing: .2px;
+      z-index: 10000;
+      user-select: none;
+    }
+
+    /* на телефоне делаем стрелки чуть больше/удобнее */
+    @media (max-width: 520px){
+      .lb-prev, .lb-next{ width: 52px; height: 52px; border-radius: 16px; }
+      .lb-close{ width: 50px; height: 50px; }
+      .lb-counter{ bottom: 18px; font-size: 14px; }
+    }
   </style>
 </head>
 
@@ -357,11 +444,37 @@
   </div>
 </section>
 
+<!-- LIGHTBOX -->
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <!-- X -->
+  <button class="lb-btn lb-close" id="lbClose" onclick="closeLightbox(); event.stopPropagation();" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M6 6L18 18M18 6L6 18" stroke="rgba(255,255,255,0.92)" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <!-- Prev -->
+  <button class="lb-btn lb-prev" id="lbPrev" onclick="prevPhoto(); event.stopPropagation();" aria-label="Previous">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M15 6L9 12L15 18" stroke="rgba(255,255,255,0.92)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <!-- Next -->
+  <button class="lb-btn lb-next" id="lbNext" onclick="nextPhoto(); event.stopPropagation();" aria-label="Next">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M9 6L15 12L9 18" stroke="rgba(255,255,255,0.92)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <!-- Counter -->
+  <div class="lb-counter" id="lbCounter" onclick="event.stopPropagation()">1 / 1</div>
+
+  <!-- Image -->
   <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation()">
 </div>
 
-  <script>
+<script>
 const folders = {
   plaster: {
     title: "Plaster",
@@ -372,52 +485,52 @@ const folders = {
     title: "Decorative plaster",
     preview: "previews/decorativeplaster-preview.png",
     images: [
-                 "gallery/decorative_plaster/decorative_plaster (1).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (2).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (3).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (4).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (5).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (6).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (7).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (8).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (9).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (10).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (11).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (12).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (13).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (14).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (15).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (16).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (17).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (18).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (19).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (20).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (21).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (22).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (23).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (24).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (25).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (26).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (27).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (28).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (29).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (30).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (31).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (32).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (33).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (34).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (35).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (36).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (37).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (38).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (39).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (40).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (41).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (42).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (43).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (44).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (45).jpg",
-                 "gallery/decorative_plaster/decorative_plaster (46).jpg"
+      "gallery/decorative_plaster/decorative_plaster (1).jpg",
+      "gallery/decorative_plaster/decorative_plaster (2).jpg",
+      "gallery/decorative_plaster/decorative_plaster (3).jpg",
+      "gallery/decorative_plaster/decorative_plaster (4).jpg",
+      "gallery/decorative_plaster/decorative_plaster (5).jpg",
+      "gallery/decorative_plaster/decorative_plaster (6).jpg",
+      "gallery/decorative_plaster/decorative_plaster (7).jpg",
+      "gallery/decorative_plaster/decorative_plaster (8).jpg",
+      "gallery/decorative_plaster/decorative_plaster (9).jpg",
+      "gallery/decorative_plaster/decorative_plaster (10).jpg",
+      "gallery/decorative_plaster/decorative_plaster (11).jpg",
+      "gallery/decorative_plaster/decorative_plaster (12).jpg",
+      "gallery/decorative_plaster/decorative_plaster (13).jpg",
+      "gallery/decorative_plaster/decorative_plaster (14).jpg",
+      "gallery/decorative_plaster/decorative_plaster (15).jpg",
+      "gallery/decorative_plaster/decorative_plaster (16).jpg",
+      "gallery/decorative_plaster/decorative_plaster (17).jpg",
+      "gallery/decorative_plaster/decorative_plaster (18).jpg",
+      "gallery/decorative_plaster/decorative_plaster (19).jpg",
+      "gallery/decorative_plaster/decorative_plaster (20).jpg",
+      "gallery/decorative_plaster/decorative_plaster (21).jpg",
+      "gallery/decorative_plaster/decorative_plaster (22).jpg",
+      "gallery/decorative_plaster/decorative_plaster (23).jpg",
+      "gallery/decorative_plaster/decorative_plaster (24).jpg",
+      "gallery/decorative_plaster/decorative_plaster (25).jpg",
+      "gallery/decorative_plaster/decorative_plaster (26).jpg",
+      "gallery/decorative_plaster/decorative_plaster (27).jpg",
+      "gallery/decorative_plaster/decorative_plaster (28).jpg",
+      "gallery/decorative_plaster/decorative_plaster (29).jpg",
+      "gallery/decorative_plaster/decorative_plaster (30).jpg",
+      "gallery/decorative_plaster/decorative_plaster (31).jpg",
+      "gallery/decorative_plaster/decorative_plaster (32).jpg",
+      "gallery/decorative_plaster/decorative_plaster (33).jpg",
+      "gallery/decorative_plaster/decorative_plaster (34).jpg",
+      "gallery/decorative_plaster/decorative_plaster (35).jpg",
+      "gallery/decorative_plaster/decorative_plaster (36).jpg",
+      "gallery/decorative_plaster/decorative_plaster (37).jpg",
+      "gallery/decorative_plaster/decorative_plaster (38).jpg",
+      "gallery/decorative_plaster/decorative_plaster (39).jpg",
+      "gallery/decorative_plaster/decorative_plaster (40).jpg",
+      "gallery/decorative_plaster/decorative_plaster (41).jpg",
+      "gallery/decorative_plaster/decorative_plaster (42).jpg",
+      "gallery/decorative_plaster/decorative_plaster (43).jpg",
+      "gallery/decorative_plaster/decorative_plaster (44).jpg",
+      "gallery/decorative_plaster/decorative_plaster (45).jpg",
+      "gallery/decorative_plaster/decorative_plaster (46).jpg"
     ]
   },
   wallpapers: {
@@ -438,6 +551,16 @@ const foldersDiv = document.getElementById("folders");
 const imagesDiv  = document.getElementById("images");
 const backBtn    = document.getElementById("backBtn");
 const titleEl    = document.getElementById("gallery-title");
+
+/* ===== LIGHTBOX STATE ===== */
+const lb = document.getElementById("lightbox");
+const lbImg = document.getElementById("lightboxImg");
+const lbPrevBtn = document.getElementById("lbPrev");
+const lbNextBtn = document.getElementById("lbNext");
+const lbCounter = document.getElementById("lbCounter");
+
+let currentList = [];
+let currentIndex = 0;
 
 function renderFolders(){
   foldersDiv.innerHTML = Object.entries(folders).map(([key, obj], idx) => `
@@ -474,16 +597,16 @@ function showFolderUI(key){
   titleEl.innerText        = f.title;
 
   imagesDiv.innerHTML = "";
-  f.images.forEach(src => {
+  f.images.forEach((src, idx) => {
     const d = document.createElement("div");
     d.className = "img-tile";
     d.innerHTML = `<img src="${src}" loading="lazy" alt="">`;
-    d.onclick = () => openLightbox(src);
+    d.onclick = () => openLightboxByIndex(f.images, idx);
     imagesDiv.appendChild(d);
   });
 }
 
-// ✅ Открыть папку — через hash (надежно для кнопки Back)
+// ✅ Открыть папку — через hash
 function openFolder(key){
   location.hash = key;
 }
@@ -508,29 +631,98 @@ function handleRoute(){
   else showHome();
 }
 
-// Лайтбокс
-function openLightbox(src){
-  document.getElementById("lightboxImg").src = src;
-  document.getElementById("lightbox").classList.add("open");
-}
-function closeLightbox(){
-  document.getElementById("lightbox").classList.remove("open");
-  document.getElementById("lightboxImg").src = "";
+/* ===== LIGHTBOX LOGIC ===== */
+function updateLightboxUI(){
+  const total = currentList.length || 1;
+  const shown = Math.min(Math.max(currentIndex + 1, 1), total);
+  lbCounter.textContent = `${shown} / ${total}`;
+
+  // если одна фотка — стрелки выключаем
+  const hasMany = currentList.length > 1;
+  lbPrevBtn.disabled = !hasMany;
+  lbNextBtn.disabled = !hasMany;
 }
 
-// Esc закрывает лайтбокс
+function showLightboxImage(){
+  if (!currentList.length) return;
+  lbImg.src = currentList[currentIndex];
+  updateLightboxUI();
+}
+
+function openLightboxByIndex(list, idx){
+  currentList = Array.isArray(list) ? list : [];
+  currentIndex = Math.max(0, Math.min(idx || 0, currentList.length - 1));
+
+  showLightboxImage();
+  lb.classList.add("open");
+}
+
+function closeLightbox(){
+  lb.classList.remove("open");
+  lbImg.src = "";
+}
+
+function prevPhoto(){
+  if (currentList.length <= 1) return;
+  currentIndex = (currentIndex - 1 + currentList.length) % currentList.length;
+  showLightboxImage();
+}
+
+function nextPhoto(){
+  if (currentList.length <= 1) return;
+  currentIndex = (currentIndex + 1) % currentList.length;
+  showLightboxImage();
+}
+
+/* ===== Keyboard ===== */
 document.addEventListener("keydown", (e) => {
+  // работаем только если лайтбокс открыт
+  if (!lb.classList.contains("open")) return;
+
   if (e.key === "Escape") closeLightbox();
+  if (e.key === "ArrowLeft") prevPhoto();
+  if (e.key === "ArrowRight") nextPhoto();
 });
 
-// hashchange = работает и для кнопки Back в браузере
+/* ===== Swipe (mobile) ===== */
+let touchStartX = 0;
+let touchStartY = 0;
+let touchActive = false;
+
+lb.addEventListener("touchstart", (e) => {
+  if (!lb.classList.contains("open")) return;
+  if (!e.touches || e.touches.length !== 1) return;
+
+  touchActive = true;
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+lb.addEventListener("touchend", (e) => {
+  if (!touchActive) return;
+  touchActive = false;
+
+  const t = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0] : null;
+  if (!t) return;
+
+  const dx = t.clientX - touchStartX;
+  const dy = t.clientY - touchStartY;
+
+  // фильтр: свайп должен быть в основном горизонтальный
+  if (Math.abs(dx) < 45) return;
+  if (Math.abs(dy) > 80) return;
+
+  if (dx > 0) prevPhoto();
+  else nextPhoto();
+}, { passive: true });
+
+/* ===== Browser Back/Forward on folders ===== */
 window.addEventListener("hashchange", handleRoute);
 
-// init
+/* init */
 renderFolders();
 handleRoute();
-    
 </script>
-  
+
 </body>
 </html>
