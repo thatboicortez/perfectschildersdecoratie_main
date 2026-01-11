@@ -335,71 +335,75 @@
       touch-action:pan-y;
     }
 
-    /* кнопка X */
-    .lb-close{
-      position:absolute;
-      top: -6px;
-      left: -6px;
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.06);
-      color:#fff;
-      font-size:30px;
-      line-height: 1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      backdrop-filter: blur(6px);
-    }
+ /* ===== Lightbox controls - fixed (как было раньше) ===== */
+.lb-btn{
+  position: fixed;              /* <-- вот это делает статично по экрану */
+  z-index: 10001;
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  font-size: 34px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-tap-highlight-color: transparent;
+}
 
-    /* стрелки */
-    .lb-nav{
-      position:absolute;
-      top:50%;
-      transform:translateY(-50%);
-      width:56px;
-      height:56px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.06);
-      color:#fff;
-      font-size:32px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      backdrop-filter: blur(6px);
-      user-select:none;
-    }
+.lb-btn:hover{
+  background: rgba(255,255,255,.12);
+}
 
-    .lb-prev{ left: -6px; }
-    .lb-next{ right: -6px; }
+.lb-close{
+  top: 18px;
+  left: 18px;                  /* крестик всегда сверху слева */
+  font-size: 30px;
+}
 
-    /* счётчик */
-    .lb-counter{
-      position:absolute;
-      bottom:-18px;
-      left:50%;
-      transform:translateX(-50%);
-      padding:8px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(0,0,0,0.35);
-      color: rgba(255,255,255,0.85);
-      font-size:14px;
-      backdrop-filter: blur(6px);
-      pointer-events:none;
-    }
+.lb-prev{
+  left: 18px;                   /* стрелка всегда по краю */
+  top: 50%;
+  transform: translateY(-50%);
+}
 
-    @media(max-width:520px){
-      .lb-prev{ left: 6px; }
-      .lb-next{ right: 6px; }
-      .lb-close{ top: 6px; left: 6px; }
-      .lb-counter{ bottom: 10px; }
-    }
+.lb-next{
+  right: 18px;                  /* стрелка всегда по краю */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lb-counter{
+  position: fixed;              /* счетчик тоже статичный */
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 10001;
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.35);
+  color: rgba(255,255,255,.85);
+  font-size: 14px;
+  backdrop-filter: blur(8px);
+}
+
+/* на телефоне делаем кнопки чуть больше */
+@media (max-width: 520px){
+  .lb-btn{
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+  }
+  .lb-close{ top: 14px; left: 14px; }
+  .lb-prev{ left: 12px; }
+  .lb-next{ right: 12px; }
+  .lb-counter{ bottom: 16px; }
+}
   </style>
 </head>
 
@@ -432,15 +436,16 @@
 
 <!-- LIGHTBOX -->
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-  <div class="lightbox-inner" onclick="event.stopPropagation()">
-    <button class="lb-close" type="button" onclick="closeLightbox()">×</button>
-    <button class="lb-nav lb-prev" type="button" onclick="prevPhoto()">‹</button>
+  <button class="lb-btn lb-close" onclick="event.stopPropagation(); closeLightbox();" aria-label="Close">×</button>
 
-    <img id="lightboxImg" src="" alt="" />
+  <button class="lb-btn lb-prev" onclick="event.stopPropagation(); prevPhoto();" aria-label="Previous">‹</button>
+  <button class="lb-btn lb-next" onclick="event.stopPropagation(); nextPhoto();" aria-label="Next">›</button>
 
-    <button class="lb-nav lb-next" type="button" onclick="nextPhoto()">›</button>
-    <div class="lb-counter" id="lbCounter">1 / 1</div>
+  <div class="lb-counter" onclick="event.stopPropagation()">
+    <span id="lbCounter">1 / 1</span>
   </div>
+
+  <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation()">
 </div>
 
 <script>
