@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Perfect Schilders & Decoratie</title>
+  <title>PERFECT SCHILDERS &amp; DECORATIE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/favicon.png">
 
@@ -297,141 +297,179 @@
       border-radius: 0;
     }
 
-header.hero{
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;         
-  padding: 0;
-  overflow: hidden;
-  background: #000;
-}
+    header.hero{
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+    }
 
+    header.hero::before{
+      content:"";
+      position:absolute;
+      inset:-25%;
+      z-index:0;
+      pointer-events:none;
+      background:
+        radial-gradient(680px 520px at 22% 36%, rgba(65,130,255,.10), transparent 62%),
+        radial-gradient(820px 640px at 78% 52%, rgba(0,170,255,.08), transparent 60%);
+      filter: blur(12px);
+      opacity:.85;
+    }
 
-header.hero::before{
-  content:"";
-  position:absolute;
-  inset:-25%;
-  z-index:0;
-  pointer-events:none;
-  background:
-    radial-gradient(680px 520px at 22% 36%, rgba(65,130,255,.10), transparent 62%),
-    radial-gradient(820px 640px at 78% 52%, rgba(0,170,255,.08), transparent 60%);
-  filter: blur(12px);
-  opacity:.85;
-}
+    .hero-content{
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 72px 0 56px;
+    }
 
-.hero-content{
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  padding: 72px 0 56px;         
-}
+    .hero-grid{ display:block; }
 
-.hero-grid{
-  display:block;
-}
+    .hero-left{
+      max-width: 920px;
+      margin-inline: auto;
+      text-align: center;
+      transform: translateY(-44px);
+    }
 
-
-.hero-left{
-  max-width: 920px;
-  margin-inline: auto;         
-  text-align: center;          
-  transform: translateY(-44px); 
-}
-
-
-.hero-actions{
-  margin-top:22px;
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  justify-content: center;
-}
-
-.stats{
-  margin-top:28px;
-  display:flex;
-  gap:26px;
-  align-items:flex-end;
-  justify-content: center;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:1px;
-  font-size:11px;
-  flex-wrap:wrap;
-}
-
-.stat{
-  padding-right:22px;
-  border-right: 1px solid rgba(255,255,255,.10);
-  text-align: center;
-}
-.stat:last-child{ border-right: 0; }
-
-.kicker{
-  color: var(--hero-muted);
-  font-size:12px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  margin-bottom:14px;
-}
-
-.h1{
-  font-size: clamp(40px, 6vw, 68px);
-  line-height:1.02;
-  margin:0;
-  letter-spacing:-1.2px;
-  text-transform:uppercase;
-}
-
-
-.h1 .dim{ color: var(--hero-muted); }
-
-.sub{
-  max-width: 760px;      
-  margin: 18px auto 0;          
-  color: var(--hero-muted);
-  font-size:12px;
-  line-height:1.7;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-
-@media (max-width: 980px){
-  .hero-content{
-    padding: 60px 0 44px;
-  }
-  .hero-left{
-    transform: translateY(-60px);
-    max-width: 720px;
-  }
-}
-
+    .hero-actions{
+      margin-top:22px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content: center;
+    }
 
     .stats{
       margin-top:28px;
       display:flex;
       gap:26px;
       align-items:flex-end;
+      justify-content: center;
       color:var(--muted);
       text-transform:uppercase;
       letter-spacing:1px;
       font-size:11px;
       flex-wrap:wrap;
     }
+
     .stat{
       padding-right:22px;
-      border-right:1px solid rgba(255,255,255,.10);
+      border-right: 1px solid rgba(255,255,255,.10);
+      text-align: center;
     }
-    .stat:last-child{ border-right:0; }
+    .stat:last-child{ border-right: 0; }
+
+    .kicker{
+      color: var(--hero-muted);
+      font-size:12px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      margin-bottom:14px;
+    }
+
+    .h1{
+      font-size: clamp(40px, 6vw, 68px);
+      line-height:1.02;
+      margin:0;
+      letter-spacing:-1.2px;
+      text-transform:uppercase;
+    }
+
+    .h1 .dim{ color: var(--hero-muted); }
+
+    .sub{
+      max-width: 760px;
+      margin: 18px auto 0;
+      color: var(--hero-muted);
+      font-size:12px;
+      line-height:1.7;
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+
+    @media (max-width: 980px){
+      .hero-content{ padding: 60px 0 44px; }
+      .hero-left{
+        transform: translateY(-60px);
+        max-width: 720px;
+      }
+    }
+
     .stat strong{
       display:block;
       color:var(--text);
       font-size:24px;
       letter-spacing:-.4px;
       margin-bottom:6px;
+    }
+
+    /* ===== Trustpilot boxed block (Macroedges-ish) ===== */
+    .tp-wrap{
+      margin-top: 18px;
+      display:flex;
+      justify-content:center;
+    }
+    .tp-box{
+      width: min(560px, 100%);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.55);
+      padding: 14px 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .tp-box::before{
+      content:"";
+      position:absolute;
+      inset:-60%;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.12) 45%, transparent 60%);
+      transform: translateX(-60%) rotate(10deg);
+      opacity: .0;
+      pointer-events:none;
+    }
+    @media (hover:hover) and (pointer:fine){
+      .tp-box:hover::before{
+        opacity: .9;
+        animation: tpShine .9s ease forwards;
+      }
+    }
+    @keyframes tpShine{
+      from{ transform:translateX(-60%) rotate(10deg); }
+      to{ transform:translateX(60%) rotate(10deg); }
+    }
+
+    .tp-label{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 10px;
+      color: rgba(233,238,245,.70);
+      font-size:11px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+    .tp-pill{
+      border:1px solid rgba(255,255,255,.12);
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(0,0,0,.22);
+      color: rgba(233,238,245,.78);
+      font-weight:800;
+      letter-spacing:1.5px;
+      white-space:nowrap;
+    }
+
+    /* Keep Trustpilot widget aligned inside */
+    .tp-box .trustpilot-widget{
+      width: 100%;
     }
 
     /* ===== Sections ===== */
@@ -819,13 +857,17 @@ header.hero::before{
       .lb-next{ right: 12px; }
       .lb-counter{ bottom: 16px; }
 
-   .mini-footer-inner{
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-}
+      .mini-footer-inner{
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    }
   </style>
+
+  <!-- TrustBox script (Trustpilot) -->
+  <script type="text/javascript" src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+  <!-- End TrustBox script -->
 </head>
 
 <body>
@@ -905,6 +947,29 @@ header.hero::before{
             <div class="stat"><strong>400+</strong>PROJECTS</div>
             <div class="stat"><strong>NL</strong>SERVICE AREA</div>
           </div>
+
+          <!-- Trustpilot (boxed, centered) -->
+          <div class="tp-wrap">
+            <div class="tp-box">
+              <div class="tp-label">
+                <span>REVIEWS</span>
+                <span class="tp-pill">TRUSTPILOT</span>
+              </div>
+
+              <!-- TrustBox widget - Review Collector -->
+              <div class="trustpilot-widget"
+                   data-locale="en-US"
+                   data-template-id="56278e9abfbbba0bdcd568bc"
+                   data-businessunit-id="697df01d68c5676d5f361b80"
+                   data-style-height="52px"
+                   data-style-width="100%"
+                   data-token="90767c34-31d3-4182-a88d-5d272f4ab9bf">
+                <a href="https://www.trustpilot.com/review/perfectschildersdecoratie.com" target="_blank" rel="noopener">Trustpilot</a>
+              </div>
+              <!-- End TrustBox widget -->
+            </div>
+          </div>
+          <!-- End Trustpilot -->
         </div>
       </div>
     </div>
