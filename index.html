@@ -11,6 +11,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- TrustBox script (Trustpilot) -->
+  <script type="text/javascript" src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+  <!-- End TrustBox script -->
+
   <style>
     :root{
       --bg:#000;
@@ -89,6 +93,14 @@
       height: 1px;
       width: 100%;
       background: rgba(255,255,255,.06);
+    }
+
+    /* ===== When a folder is open: show ONLY gallery (plus topbar) ===== */
+    body.in-gallery header.hero,
+    body.in-gallery section:not(#works),
+    body.in-gallery footer.mini-footer,
+    body.in-gallery .section-divider{
+      display:none !important;
     }
 
     .topbar{
@@ -390,14 +402,6 @@
       letter-spacing:1px;
     }
 
-    @media (max-width: 980px){
-      .hero-content{ padding: 60px 0 44px; }
-      .hero-left{
-        transform: translateY(-60px);
-        max-width: 720px;
-      }
-    }
-
     .stat strong{
       display:block;
       color:var(--text);
@@ -669,68 +673,48 @@
       transform: translateY(-1px);
     }
 
-    /* ===== Reviews section ===== */
+    /* ===== Reviews section (Trustpilot) ===== */
     .reviews-box{
-      margin-top: 18px;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 18px;
-      background: rgba(0,0,0,.35);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 18px 60px rgba(0,0,0,.55);
-      padding: 18px;
-      overflow:hidden;
-      position:relative;
-    }
-    .reviews-box::before{
-      content:"";
-      position:absolute;
-      inset:-60%;
-      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.12) 45%, transparent 60%);
-      transform: translateX(-60%) rotate(10deg);
-      opacity:0;
-      pointer-events:none;
-    }
-    @media (hover:hover) and (pointer:fine){
-      .reviews-box:hover::before{
-        opacity:.9;
-        animation: reviewsShine .9s ease forwards;
-      }
-    }
-    @keyframes reviewsShine{
-      from{ transform:translateX(-60%) rotate(10deg); }
-      to{ transform:translateX(60%) rotate(10deg); }
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,0));
+      box-shadow: 0 10px 40px rgba(0,0,0,.35);
     }
 
-    .reviews-top{
+    .rating-line{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      margin-bottom: 10px;
+      gap:14px;
+      margin: 10px 0 16px;
       color: rgba(233,238,245,.70);
       font-size:11px;
       letter-spacing:2px;
       text-transform:uppercase;
     }
-    .reviews-pill{
+
+    .rating-pill{
       border:1px solid rgba(255,255,255,.12);
       padding:6px 10px;
       border-radius:999px;
       background: rgba(0,0,0,.22);
-      color: rgba(233,238,245,.78);
+      color: rgba(233,238,245,.85);
       font-weight:800;
       letter-spacing:1.5px;
       white-space:nowrap;
     }
-    .rating-line{
-      margin: 6px 0 12px;
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+
+    .rating-value{
+      font-weight:900;
       color: rgba(233,238,245,.92);
+      letter-spacing:2px;
+      white-space:nowrap;
     }
-    .reviews-box .trustpilot-widget{ width:100%; }
+
+    .reviews-box .trustpilot-widget{
+      width: 100%;
+    }
 
     /* ===== Bottom mini footer bar ===== */
     .mini-footer{
@@ -817,29 +801,12 @@
       backdrop-filter: blur(8px);
     }
 
-    /* ===== Gallery "separate tab" mode ===== */
-    body.gallery-mode header.hero,
-    body.gallery-mode #faq,
-    body.gallery-mode #contacts,
-    body.gallery-mode #reviews,
-    body.gallery-mode footer.mini-footer,
-    body.gallery-mode .section-divider{
-      display:none !important;
-    }
-    body.gallery-mode #works{
-      padding-top: 32px;
-      padding-bottom: 56px;
-    }
-    body.gallery-mode #gallery-lead{
-      display:none;
-    }
-
     /* ===== Responsive ===== */
     @media(max-width: 1060px){
       .brand-text{ max-width: 260px; }
     }
 
-    /* Mobile layout like Macroedges */
+    /* Mobile / tablet: KEEP 2 columns for folders & photos */
     @media (max-width: 980px){
       .nav-links{ display:none; }
       .nav-right .lang{ display:none; }
@@ -849,23 +816,15 @@
       .nav{ padding: 12px 12px; }
       .brand-text{ max-width: 62vw; }
 
-      /* IMPORTANT: on mobile -> 2 columns for folders + images */
-      #folders.folders-grid{ grid-template-columns:repeat(2,1fr); }
-      #images.images-grid{ grid-template-columns:repeat(2,1fr); }
+      #folders.folders-grid{ grid-template-columns:repeat(2,1fr); gap:14px; }
+      #images.images-grid{ grid-template-columns:repeat(2,1fr); gap:12px; }
 
       .faq-grid{ grid-template-columns: 1fr; }
       .h2{ font-size:36px; }
-    }
 
-    @media(max-width: 560px){
-      .brand-text{ max-width: 58vw; }
+      .hero-content{ padding: 60px 0 44px; }
+      .hero-left{ transform: translateY(-60px); max-width: 720px; }
 
-      /* very small screens -> 1 column */
-      #folders.folders-grid{ grid-template-columns:1fr; }
-      #images.images-grid{ grid-template-columns:1fr; }
-    }
-
-    @media(max-width: 980px){
       .lb-btn{ width: 58px; height: 58px; border-radius: 16px; }
       .lb-close{ top: 14px; left: 14px; }
       .lb-prev{ left: 12px; }
@@ -878,10 +837,15 @@
         text-align: center;
       }
     }
-  </style>
 
-  <!-- TrustBox script (Trustpilot) -->
-  <script type="text/javascript" src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+    @media(max-width: 560px){
+      .container{ width: calc(100% - 28px); }
+      .brand-text{ max-width: 58vw; }
+      #folders.folders-grid{ gap:12px; }
+      #images.images-grid{ gap:10px; }
+      .folder-title{ font-size:12px; }
+    }
+  </style>
 </head>
 
 <body>
@@ -890,24 +854,24 @@
   <div class="topbar">
     <div class="nav-box">
       <div class="nav">
-        <a class="brand" href="#top" id="brandLink">
+        <a class="brand" href="#top" data-navhome>
           <span class="brand-mark" aria-hidden="true"></span>
           <span class="brand-text">PERFECT SCHILDERS &amp; DECORATIE</span>
         </a>
 
         <div class="nav-links">
-          <a href="#works" data-i18n="nav.works">WORKS</a>
-          <a href="#faq" data-i18n="nav.faq">FAQ</a>
-          <a href="#contacts" data-i18n="nav.contact">CONTACT</a>
-          <a href="#reviews" data-i18n="nav.reviews">REVIEWS</a>
+          <a href="#works" data-i18n="nav_works">WORKS</a>
+          <a href="#faq" data-i18n="nav_faq">FAQ</a>
+          <a href="#contacts" data-i18n="nav_contact">CONTACT</a>
+          <a href="#reviews" data-i18n="nav_reviews">REVIEWS</a>
         </div>
 
         <div class="nav-right">
           <div class="lang" aria-label="Language">
-            <button class="active" type="button" data-lang-btn="en">EN</button>
-            <button type="button" data-lang-btn="nl">NL</button>
+            <button class="active" type="button" data-setlang="en">EN</button>
+            <button type="button" data-setlang="nl">NL</button>
           </div>
-          <a class="btn primary" href="#works" data-i18n="nav.gallery">GALLERY</a>
+          <a class="btn primary" href="#works" data-i18n="nav_gallery">GALLERY</a>
 
           <!-- Mobile burger -->
           <button class="burger" type="button" aria-label="Open menu" aria-expanded="false">
@@ -919,51 +883,50 @@
       <!-- MOBILE DROPDOWN -->
       <div class="mobile-menu" aria-hidden="true">
         <div class="mobile-links">
-          <a href="#works" data-close data-i18n="nav.works">WORKS</a>
-          <a href="#faq" data-close data-i18n="nav.faq">FAQ</a>
-          <a href="#contacts" data-close data-i18n="nav.contact">CONTACT</a>
-          <a href="#reviews" data-close data-i18n="nav.reviews">REVIEWS</a>
+          <a href="#works" data-close data-i18n="nav_works">WORKS</a>
+          <a href="#faq" data-close data-i18n="nav_faq">FAQ</a>
+          <a href="#contacts" data-close data-i18n="nav_contact">CONTACT</a>
+          <a href="#reviews" data-close data-i18n="nav_reviews">REVIEWS</a>
         </div>
 
         <div class="mobile-lang">
-          <button class="active" type="button" data-lang="en">EN</button>
-          <button type="button" data-lang="nl">NL</button>
+          <button class="active" type="button" data-lang data-setlang="en">EN</button>
+          <button type="button" data-lang data-setlang="nl">NL</button>
         </div>
 
-        <a class="btn primary mobile-cta" href="#works" data-close data-i18n="nav.gallery">GALLERY</a>
+        <a class="btn primary mobile-cta" href="#works" data-close data-i18n="nav_gallery">GALLERY</a>
       </div>
     </div>
   </div>
 
-  <!-- HERO (100vh, black) -->
+  <!-- HERO -->
   <header id="top" class="hero">
     <div class="container hero-content">
       <div class="hero-grid">
         <div class="hero-left">
-          <div class="kicker" data-i18n="hero.kicker">Professional renovation &amp; decoration</div>
+          <div class="kicker" data-i18n="hero_kicker">Professional renovation &amp; decoration</div>
 
-          <h1 class="h1" data-i18n="hero.titleHtml">
-            TRANSFORM&nbsp;YOUR<br />
-            HOME TODAY.<br />
-            <span class="dim">QUALITY YOU CAN TRUST.</span>
+          <h1 class="h1">
+            <span data-i18n="hero_h1_a">TRANSFORM&nbsp;YOUR</span><br />
+            <span data-i18n="hero_h1_b">HOME TODAY.</span><br />
+            <span class="dim" data-i18n="hero_h1_c">QUALITY YOU CAN TRUST.</span>
           </h1>
 
-          <div class="sub" data-i18n="hero.subHtml">
+          <div class="sub" data-i18n="hero_sub">
             PLASTER, DECORATIVE PLASTER, WALLPAPERS, LAMINATE — CLEAN WORK, <br>
             MODERN STYLE, AND ATTENTION TO DETAILS.
           </div>
 
           <div class="hero-actions">
-            <a class="btn primary" href="#works" data-i18n="hero.ctaWorksHtml">EXPLORE WORKS <span aria-hidden="true">→</span></a>
-            <a class="btn" href="#contacts" data-i18n="hero.ctaContact">CONTACT</a>
+            <a class="btn primary" href="#works"><span data-i18n="hero_btn_works">EXPLORE WORKS</span> <span aria-hidden="true">→</span></a>
+            <a class="btn" href="#contacts" data-i18n="hero_btn_contact">CONTACT</a>
           </div>
 
           <div class="stats">
-            <div class="stat"><strong data-i18n="stats.yearsValue">20</strong><span data-i18n="stats.yearsLabel">YEARS EXP.</span></div>
-            <div class="stat"><strong data-i18n="stats.projectsValue">400+</strong><span data-i18n="stats.projectsLabel">PROJECTS</span></div>
-            <div class="stat"><strong data-i18n="stats.areaValue">NL</strong><span data-i18n="stats.areaLabel">SERVICE AREA</span></div>
+            <div class="stat"><strong>20</strong><span data-i18n="stat_years">YEARS EXP.</span></div>
+            <div class="stat"><strong>400+</strong><span data-i18n="stat_projects">PROJECTS</span></div>
+            <div class="stat"><strong>NL</strong><span data-i18n="stat_area">SERVICE AREA</span></div>
           </div>
-
         </div>
       </div>
     </div>
@@ -974,8 +937,8 @@
   <!-- WORKS -->
   <section id="works">
     <div class="container">
-      <h2 class="h2" id="gallery-title" data-i18n="works.title">Our works</h2>
-      <p class="lead" id="gallery-lead" data-i18n="works.lead">
+      <h2 class="h2" id="gallery-title" data-i18n="works_title">Our works</h2>
+      <p class="lead" id="works-lead" data-i18n="works_lead">
         SELECT A CATEGORY TO VIEW PROJECT PHOTOS. CLICK ANY PHOTO TO OPEN FULL SCREEN.
       </p>
 
@@ -983,7 +946,7 @@
       <div id="images" class="images-grid" style="display:none;"></div>
 
       <div class="center-actions">
-        <button id="backBtn" onclick="goBack()" style="display:none;" data-i18n="works.back">← Back</button>
+        <button id="backBtn" onclick="goBack()" style="display:none;" data-i18n="back_btn">← Back</button>
       </div>
     </div>
   </section>
@@ -993,39 +956,39 @@
   <!-- FAQ -->
   <section id="faq">
     <div class="container">
-      <div class="kicker" data-i18n="faq.kicker">FREQUENTLY ASKED QUESTIONS</div>
-      <h2 class="h2" data-i18n="faq.title">COMMON QUESTIONS</h2>
-      <p class="lead" data-i18n="faq.lead">EVERYTHING YOU NEED TO KNOW ABOUT OUR WORKS AND PROCESS</p>
+      <div class="kicker" data-i18n="faq_kicker">FREQUENTLY ASKED QUESTIONS</div>
+      <h2 class="h2" data-i18n="faq_title">COMMON QUESTIONS</h2>
+      <p class="lead" data-i18n="faq_lead">EVERYTHING YOU NEED TO KNOW ABOUT OUR WORKS AND PROCESS</p>
 
       <div class="faq-grid">
         <div class="qa">
-          <h4 data-i18n="faq.q1">WHAT'S INCLUDED IN A PROJECT?</h4>
-          <p data-i18n="faq.a1">PREPARATION, MATERIALS RECOMMENDATIONS, CLEAN FINISHING, AND PHOTO RESULTS.</p>
+          <h4 data-i18n="q1">WHAT'S INCLUDED IN A PROJECT?</h4>
+          <p data-i18n="a1">PREPARATION, MATERIALS RECOMMENDATIONS, CLEAN FINISHING, AND PHOTO RESULTS.</p>
         </div>
 
         <div class="qa">
-          <h4 data-i18n="faq.q2">HOW FAST CAN YOU START?</h4>
-          <p data-i18n="faq.a2">DEPENDS ON CURRENT SCHEDULE — MESSAGE US AND WE’LL CONFIRM THE NEAREST SLOT.</p>
+          <h4 data-i18n="q2">HOW FAST CAN YOU START?</h4>
+          <p data-i18n="a2">DEPENDS ON CURRENT SCHEDULE — MESSAGE US AND WE’LL CONFIRM THE NEAREST SLOT.</p>
         </div>
 
         <div class="qa">
-          <h4 data-i18n="faq.q3">DO YOU WORK WITH MY MATERIALS?</h4>
-          <p data-i18n="faq.a3">YES — OR WE CAN RECOMMEND AND PROVIDE A SHOPPING LIST BASED ON YOUR GOAL.</p>
+          <h4 data-i18n="q3">DO YOU WORK WITH MY MATERIALS?</h4>
+          <p data-i18n="a3">YES — OR WE CAN RECOMMEND AND PROVIDE A SHOPPING LIST BASED ON YOUR GOAL.</p>
         </div>
 
         <div class="qa">
-          <h4 data-i18n="faq.q4">DO YOU DO SMALL JOBS?</h4>
-          <p data-i18n="faq.a4">YES — FROM SINGLE WALLS TO FULL ROOMS AND COMPLEX DECORATIVE FINISHES.</p>
+          <h4 data-i18n="q4">DO YOU DO SMALL JOBS?</h4>
+          <p data-i18n="a4">YES — FROM SINGLE WALLS TO FULL ROOMS AND COMPLEX DECORATIVE FINISHES.</p>
         </div>
 
         <div class="qa">
-          <h4 data-i18n="faq.q5">HOW DO YOU CALCULATE PRICE?</h4>
-          <p data-i18n="faq.a5">BY AREA, MATERIALS, COMPLEXITY, AND PREP WORK. SEND PHOTOS FOR A QUICK ESTIMATE.</p>
+          <h4 data-i18n="q5">HOW DO YOU CALCULATE PRICE?</h4>
+          <p data-i18n="a5">BY AREA, MATERIALS, COMPLEXITY, AND PREP WORK. SEND PHOTOS FOR A QUICK ESTIMATE.</p>
         </div>
 
         <div class="qa">
-          <h4 data-i18n="faq.q6">WHERE DO YOU WORK?</h4>
-          <p data-i18n="faq.a6">NETHERLANDS — CONTACT US WITH YOUR CITY AND WE’LL CONFIRM AVAILABILITY.</p>
+          <h4 data-i18n="q6">WHERE DO YOU WORK?</h4>
+          <p data-i18n="a6">NETHERLANDS — CONTACT US WITH YOUR CITY AND WE’LL CONFIRM AVAILABILITY.</p>
         </div>
       </div>
     </div>
@@ -1036,12 +999,12 @@
   <!-- CONTACTS -->
   <section id="contacts">
     <div class="container">
-      <h2 class="h2" data-i18n="contacts.title">Contacts</h2>
-      <p class="lead" data-i18n="contacts.lead">WRITE TO US — WE REPLY FAST AND CAN ESTIMATE YOUR PROJECT.</p>
+      <h2 class="h2" data-i18n="contacts_title">Contacts</h2>
+      <p class="lead" data-i18n="contacts_lead">WRITE TO US — WE REPLY FAST AND CAN ESTIMATE YOUR PROJECT.</p>
 
       <div class="contacts">
-        <a href="mailto:perfectschildersdecoratie@gmail.com" data-i18n="contacts.email">Email</a>
-        <a href="https://wa.me/31619449568" target="_blank" rel="noopener" data-i18n="contacts.whatsapp">WhatsApp</a>
+        <a href="mailto:perfectschildersdecoratie@gmail.com" data-i18n="contacts_email">Email</a>
+        <a href="https://wa.me/31619449568" target="_blank" rel="noopener" data-i18n="contacts_whatsapp">WhatsApp</a>
       </div>
     </div>
   </section>
@@ -1051,20 +1014,18 @@
   <!-- REVIEWS (Trustpilot) -->
   <section id="reviews">
     <div class="container">
-      <div class="kicker" data-i18n="reviews.kicker">REVIEWS</div>
-      <h2 class="h2" data-i18n="reviews.title">REVIEWS</h2>
-      <p class="lead" data-i18n="reviews.lead">
-        HERE YOU CAN LEAVE US A REVIEW OR READ WHAT OTHERS SAY.
+      <div class="kicker" data-i18n="reviews_kicker">REVIEWS</div>
+      <h2 class="h2" data-i18n="reviews_title">TRUSTPILOT</h2>
+      <p class="lead" data-i18n="reviews_lead">
+        HERE YOU CAN LEAVE US A REVIEW OR SEE WHAT OTHER CLIENTS SAY.
       </p>
 
       <div class="reviews-box">
-        <div class="reviews-top">
-          <span data-i18n="reviews.boxLabel">TRUSTPILOT</span>
-          <span class="reviews-pill">TRUSTPILOT</span>
+        <div class="rating-line">
+          <span data-i18n="rating_label">CURRENT RATING</span>
+          <!-- change this once a month -->
+          <span class="rating-value" id="ratingValue">5 ★</span>
         </div>
-
-        <!-- You will update this once per month -->
-        <div class="rating-line" id="ratingLine">5 ★</div>
 
         <!-- TrustBox widget - Review Collector -->
         <div class="trustpilot-widget"
@@ -1087,7 +1048,7 @@
   <footer class="mini-footer">
     <div class="container mini-footer-inner">
       <div>© <span id="year"></span> PERFECT SCHILDERS &amp; DECORATIE</div>
-      <div data-i18n="footer.rights">ALL RIGHTS RESERVED</div>
+      <div data-i18n="footer_right">ALL RIGHTS RESERVED</div>
     </div>
   </footer>
 
@@ -1111,150 +1072,167 @@
 document.getElementById("year").textContent = new Date().getFullYear();
 
 /* =========================
-   SIMPLE i18n (EN / NL)
+   i18n
 ========================= */
 const i18n = {
   en: {
-    "nav.works": "WORKS",
-    "nav.faq": "FAQ",
-    "nav.contact": "CONTACT",
-    "nav.reviews": "REVIEWS",
-    "nav.gallery": "GALLERY",
+    nav_works: "WORKS",
+    nav_faq: "FAQ",
+    nav_contact: "CONTACT",
+    nav_reviews: "REVIEWS",
+    nav_gallery: "GALLERY",
 
-    "hero.kicker": "Professional renovation & decoration",
-    "hero.titleHtml": `TRANSFORM&nbsp;YOUR<br />HOME TODAY.<br /><span class="dim">QUALITY YOU CAN TRUST.</span>`,
-    "hero.subHtml": `PLASTER, DECORATIVE PLASTER, WALLPAPERS, LAMINATE — CLEAN WORK, <br>MODERN STYLE, AND ATTENTION TO DETAILS.`,
-    "hero.ctaWorksHtml": `EXPLORE WORKS <span aria-hidden="true">→</span>`,
-    "hero.ctaContact": "CONTACT",
+    hero_kicker: "Professional renovation & decoration",
+    hero_h1_a: "TRANSFORM YOUR",
+    hero_h1_b: "HOME TODAY.",
+    hero_h1_c: "QUALITY YOU CAN TRUST.",
+    hero_sub: "PLASTER, DECORATIVE PLASTER, WALLPAPERS, LAMINATE — CLEAN WORK, <br>MODERN STYLE, AND ATTENTION TO DETAILS.",
+    hero_btn_works: "EXPLORE WORKS",
+    hero_btn_contact: "CONTACT",
+    stat_years: "YEARS EXP.",
+    stat_projects: "PROJECTS",
+    stat_area: "SERVICE AREA",
 
-    "stats.yearsValue": "20",
-    "stats.yearsLabel": "YEARS EXP.",
-    "stats.projectsValue": "400+",
-    "stats.projectsLabel": "PROJECTS",
-    "stats.areaValue": "NL",
-    "stats.areaLabel": "SERVICE AREA",
+    works_title: "Our works",
+    works_lead: "SELECT A CATEGORY TO VIEW PROJECT PHOTOS. CLICK ANY PHOTO TO OPEN FULL SCREEN.",
+    back_btn: "← Back",
 
-    "works.title": "Our works",
-    "works.lead": "SELECT A CATEGORY TO VIEW PROJECT PHOTOS. CLICK ANY PHOTO TO OPEN FULL SCREEN.",
-    "works.back": "← Back",
+    faq_kicker: "FREQUENTLY ASKED QUESTIONS",
+    faq_title: "COMMON QUESTIONS",
+    faq_lead: "EVERYTHING YOU NEED TO KNOW ABOUT OUR WORKS AND PROCESS",
+    q1: "WHAT'S INCLUDED IN A PROJECT?",
+    a1: "PREPARATION, MATERIALS RECOMMENDATIONS, CLEAN FINISHING, AND PHOTO RESULTS.",
+    q2: "HOW FAST CAN YOU START?",
+    a2: "DEPENDS ON CURRENT SCHEDULE — MESSAGE US AND WE’LL CONFIRM THE NEAREST SLOT.",
+    q3: "DO YOU WORK WITH MY MATERIALS?",
+    a3: "YES — OR WE CAN RECOMMEND AND PROVIDE A SHOPPING LIST BASED ON YOUR GOAL.",
+    q4: "DO YOU DO SMALL JOBS?",
+    a4: "YES — FROM SINGLE WALLS TO FULL ROOMS AND COMPLEX DECORATIVE FINISHES.",
+    q5: "HOW DO YOU CALCULATE PRICE?",
+    a5: "BY AREA, MATERIALS, COMPLEXITY, AND PREP WORK. SEND PHOTOS FOR A QUICK ESTIMATE.",
+    q6: "WHERE DO YOU WORK?",
+    a6: "NETHERLANDS — CONTACT US WITH YOUR CITY AND WE’LL CONFIRM AVAILABILITY.",
 
-    "faq.kicker": "FREQUENTLY ASKED QUESTIONS",
-    "faq.title": "COMMON QUESTIONS",
-    "faq.lead": "EVERYTHING YOU NEED TO KNOW ABOUT OUR WORKS AND PROCESS",
-    "faq.q1": "WHAT'S INCLUDED IN A PROJECT?",
-    "faq.a1": "PREPARATION, MATERIALS RECOMMENDATIONS, CLEAN FINISHING, AND PHOTO RESULTS.",
-    "faq.q2": "HOW FAST CAN YOU START?",
-    "faq.a2": "DEPENDS ON CURRENT SCHEDULE — MESSAGE US AND WE’LL CONFIRM THE NEAREST SLOT.",
-    "faq.q3": "DO YOU WORK WITH MY MATERIALS?",
-    "faq.a3": "YES — OR WE CAN RECOMMEND AND PROVIDE A SHOPPING LIST BASED ON YOUR GOAL.",
-    "faq.q4": "DO YOU DO SMALL JOBS?",
-    "faq.a4": "YES — FROM SINGLE WALLS TO FULL ROOMS AND COMPLEX DECORATIVE FINISHES.",
-    "faq.q5": "HOW DO YOU CALCULATE PRICE?",
-    "faq.a5": "BY AREA, MATERIALS, COMPLEXITY, AND PREP WORK. SEND PHOTOS FOR A QUICK ESTIMATE.",
-    "faq.q6": "WHERE DO YOU WORK?",
-    "faq.a6": "NETHERLANDS — CONTACT US WITH YOUR CITY AND WE’LL CONFIRM AVAILABILITY.",
+    contacts_title: "Contacts",
+    contacts_lead: "WRITE TO US — WE REPLY FAST AND CAN ESTIMATE YOUR PROJECT.",
+    contacts_email: "Email",
+    contacts_whatsapp: "WhatsApp",
 
-    "contacts.title": "Contacts",
-    "contacts.lead": "WRITE TO US — WE REPLY FAST AND CAN ESTIMATE YOUR PROJECT.",
-    "contacts.email": "Email",
-    "contacts.whatsapp": "WhatsApp",
+    reviews_kicker: "REVIEWS",
+    reviews_title: "TRUSTPILOT",
+    reviews_lead: "HERE YOU CAN LEAVE US A REVIEW OR SEE WHAT OTHER CLIENTS SAY.",
+    rating_label: "CURRENT RATING",
 
-    "reviews.kicker": "REVIEWS",
-    "reviews.title": "REVIEWS",
-    "reviews.lead": "HERE YOU CAN LEAVE US A REVIEW OR READ WHAT OTHERS SAY.",
-    "reviews.boxLabel": "TRUSTPILOT",
+    footer_right: "ALL RIGHTS RESERVED",
 
-    "footer.rights": "ALL RIGHTS RESERVED",
-
-    /* Buttons/labels used in cards */
-    "ui.open": "OPEN"
+    open: "OPEN",
+    folder_plaster: "Plaster",
+    folder_decorative_plaster: "Decorative plaster",
+    folder_wallpapers: "Wallpapers",
+    folder_laminate: "Laminate"
   },
-
   nl: {
-    "nav.works": "WERKEN",
-    "nav.faq": "FAQ",
-    "nav.contact": "CONTACT",
-    "nav.reviews": "RECENSIES",
-    "nav.gallery": "GALERIJ",
+    nav_works: "WERKEN",
+    nav_faq: "FAQ",
+    nav_contact: "CONTACT",
+    nav_reviews: "RECENSIES",
+    nav_gallery: "GALERIJ",
 
-    "hero.kicker": "Professionele renovatie & decoratie",
-    "hero.titleHtml": `TRANSFORMEER&nbsp;JE<br />HUIS VANDAAG.<br /><span class="dim">KWALITEIT WAAR JE OP KUNT VERTROUWEN.</span>`,
-    "hero.subHtml": `PLEISTERWERK, DECORATIEF STUKWERK, BEHANG, LAMINAAT — NET WERK, <br>MODERNE STIJL EN OOG VOOR DETAIL.`,
-    "hero.ctaWorksHtml": `BEKIJK WERKEN <span aria-hidden="true">→</span>`,
-    "hero.ctaContact": "CONTACT",
+    hero_kicker: "Professionele renovatie & decoratie",
+    hero_h1_a: "VERANDER JOUW",
+    hero_h1_b: "HUIS VANDAAG.",
+    hero_h1_c: "KWALITEIT WAAR JE OP KUNT VERTROUWEN.",
+    hero_sub: "PLEISTERWERK, DECORATIEF STUCWERK, BEHANG, LAMINAAT — NET WERK, <br>MODERNE STIJL EN OOG VOOR DETAIL.",
+    hero_btn_works: "BEKIJK WERKEN",
+    hero_btn_contact: "CONTACT",
+    stat_years: "JAAR ERVARING",
+    stat_projects: "PROJECTEN",
+    stat_area: "REGIO",
 
-    "stats.yearsValue": "20",
-    "stats.yearsLabel": "JAAR ERVARING",
-    "stats.projectsValue": "400+",
-    "stats.projectsLabel": "PROJECTEN",
-    "stats.areaValue": "NL",
-    "stats.areaLabel": "REGIO",
+    works_title: "Onze werken",
+    works_lead: "KIES EEN CATEGORIE OM FOTO’S TE BEKIJKEN. TIK OP EEN FOTO VOOR VOLLEDIG SCHERM.",
+    back_btn: "← Terug",
 
-    "works.title": "Onze werken",
-    "works.lead": "KIES EEN CATEGORIE OM PROJECTFOTO’S TE BEKIJKEN. TIK OP EEN FOTO OM VOLLEDIG SCHERM TE OPENEN.",
-    "works.back": "← Terug",
+    faq_kicker: "VEELGESTELDE VRAGEN",
+    faq_title: "VEELGESTELDE VRAGEN",
+    faq_lead: "ALLES WAT JE MOET WETEN OVER ONZE WERKEN EN AANPAK",
+    q1: "WAT IS INBEGREPEN IN EEN PROJECT?",
+    a1: "VOORBEREIDING, MATERIAALADVIES, NETTE AFWERKING EN FOTORESULTATEN.",
+    q2: "HOE SNEL KUNNEN JULLIE STARTEN?",
+    a2: "AFHANKELIJK VAN DE PLANNING — STUUR ONS EEN BERICHT EN WE BEVESTIGEN DE EERSTE MOGELIJKHEID.",
+    q3: "WERKEN JULLIE MET MIJN MATERIALEN?",
+    a3: "JA — OF WE ADVISEREN EN MAKEN EEN INKOOPLIJST OP BASIS VAN JOUW DOEL.",
+    q4: "DOEN JULLIE OOK KLEINE KLUSSEN?",
+    a4: "JA — VAN ÉÉN MUUR TOT COMPLETE KAMERS EN COMPLEX DECORATIEF WERK.",
+    q5: "HOE BEREKENEN JULLIE DE PRIJS?",
+    a5: "OPPERVLAKTE, MATERIALEN, COMPLEXITEIT EN VOORBEREIDING. STUUR FOTO’S VOOR SNELLE INSCHATTING.",
+    q6: "WAAR WERKEN JULLIE?",
+    a6: "NEDERLAND — STUUR JE PLAATS EN WE BEVESTIGEN BESCHIKBAARHEID.",
 
-    "faq.kicker": "VEELGESTELDE VRAGEN",
-    "faq.title": "VAAK GESTELDE VRAGEN",
-    "faq.lead": "ALLES WAT JE MOET WETEN OVER ONZE WERKEN EN WERKWIJZE",
-    "faq.q1": "WAT IS INBEGREPEN IN EEN PROJECT?",
-    "faq.a1": "VOORBEREIDING, MATERIAALADVIES, NETTE AFWERKING EN FOTORESULTATEN.",
-    "faq.q2": "HOE SNEL KUNNEN JULLIE STARTEN?",
-    "faq.a2": "AFHANKELIJK VAN DE PLANNING — STUUR ONS EEN BERICHT EN WE BEVESTIGEN DE EERSTVOLGENDE PLEK.",
-    "faq.q3": "WERKEN JULLIE MET MIJN MATERIALEN?",
-    "faq.a3": "JA — OF WE ADVISEREN EN GEVEN EEN BOODSCHAPPENLIJST OP BASIS VAN JOUW DOEL.",
-    "faq.q4": "DOEN JULLIE OOK KLEINE KLUSSEN?",
-    "faq.a4": "JA — VAN ÉÉN MUUR TOT COMPLETE KAMERS EN COMPLEXE DECORATIEVE AFWERKING.",
-    "faq.q5": "HOE BEREKENEN JULLIE DE PRIJS?",
-    "faq.a5": "OP BASIS VAN OPPERVLAKTE, MATERIALEN, COMPLEXITEIT EN VOORBEREIDING. STUUR FOTO’S VOOR EEN SNELLE SCHATTING.",
-    "faq.q6": "WAAR WERKEN JULLIE?",
-    "faq.a6": "NEDERLAND — STUUR JE PLAATS EN WE BEVESTIGEN BESCHIKBAARHEID.",
+    contacts_title: "Contact",
+    contacts_lead: "SCHRIJF ONS — WE REAGEREN SNEL EN KUNNEN JE PROJECT INSCHATTEN.",
+    contacts_email: "E-mail",
+    contacts_whatsapp: "WhatsApp",
 
-    "contacts.title": "Contact",
-    "contacts.lead": "STUUR ONS EEN BERICHT — WE REAGEREN SNEL EN KUNNEN JE PROJECT INSCHATTEN.",
-    "contacts.email": "E-mail",
-    "contacts.whatsapp": "WhatsApp",
+    reviews_kicker: "RECENSIES",
+    reviews_title: "TRUSTPILOT",
+    reviews_lead: "HIER KUN JE EEN RECENSIE ACHTERLATEN OF BEKIJKEN WAT ANDEREN ZEGGEN.",
+    rating_label: "HUIDIGE BEOORDELING",
 
-    "reviews.kicker": "RECENSIES",
-    "reviews.title": "RECENSIES",
-    "reviews.lead": "HIER KUN JE EEN RECENSIE ACHTERLATEN OF BEKIJKEN WAT ANDEREN ZEGGEN.",
-    "reviews.boxLabel": "TRUSTPILOT",
+    footer_right: "ALLE RECHTEN VOORBEHOUDEN",
 
-    "footer.rights": "ALLE RECHTEN VOORBEHOUDEN",
-
-    "ui.open": "OPEN"
+    open: "OPEN",
+    folder_plaster: "Pleisterwerk",
+    folder_decorative_plaster: "Decoratief stucwerk",
+    folder_wallpapers: "Behang",
+    folder_laminate: "Laminaat"
   }
 };
 
 let currentLang = "en";
 
-function t(key){
-  return (i18n[currentLang] && i18n[currentLang][key]) ? i18n[currentLang][key] : key;
-}
+function applyI18n(lang){
+  currentLang = lang;
+  document.documentElement.lang = lang;
 
-function applyI18n(){
+  // update buttons active states
+  document.querySelectorAll("[data-setlang]").forEach(btn => {
+    btn.classList.toggle("active", btn.getAttribute("data-setlang") === lang);
+  });
+
+  // update text blocks
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
-    const val = t(key);
+    const val = i18n[lang]?.[key];
+    if (val == null) return;
 
-    // allow HTML for some elements
-    if (key.endsWith("Html")) el.innerHTML = val;
+    // allow <br> in some texts
+    if (typeof val === "string" && val.includes("<br")) el.innerHTML = val;
     else el.textContent = val;
   });
 
-  // Update folder cards text + gallery title if in folder
-  updateFolderCardTexts();
-  if (currentFolderKey && folders[currentFolderKey]) {
-    titleEl.textContent = folders[currentFolderKey].title[currentLang];
+  // update folder titles and "OPEN" pill
+  renderFolders();
+  // if inside a folder: re-render images title/lead
+  handleRoute(true);
+
+  // update trustpilot locale attribute for widget (optional)
+  const tp = document.querySelector(".trustpilot-widget");
+  if (tp){
+    tp.setAttribute("data-locale", lang === "nl" ? "nl-NL" : "en-US");
+    // Try to refresh Trustpilot widget if script already loaded
+    if (window.Trustpilot && window.Trustpilot.loadFromElement){
+      window.Trustpilot.loadFromElement(tp, true);
+    }
   }
 }
 
 /* =========================
-   FOLDERS DATA (titles translated)
+   FOLDERS DATA
 ========================= */
 const folders = {
   plaster: {
-    title: { en: "Plaster", nl: "Pleisterwerk" },
+    titleKey: "folder_plaster",
     preview: "previews/plaster-preview.png",
     images: [
       "gallery/plaster/plaster (1).jpg",
@@ -1262,7 +1240,7 @@ const folders = {
     ]
   },
   decorative_plaster: {
-    title: { en: "Decorative plaster", nl: "Decoratief stucwerk" },
+    titleKey: "folder_decorative_plaster",
     preview: "previews/decorativeplaster-preview.png",
     images: [
       "gallery/decorative_plaster/decorative_plaster (1).jpg",
@@ -1343,7 +1321,7 @@ const folders = {
     ]
   },
   wallpapers: {
-    title: { en: "Wallpapers", nl: "Behang" },
+    titleKey: "folder_wallpapers",
     preview: "previews/wallpapers-preview.png",
     images: [
       "gallery/wallpapers/wallpapers (2).jpg",
@@ -1355,7 +1333,7 @@ const folders = {
     ]
   },
   laminate: {
-    title: { en: "Laminate", nl: "Laminaat" },
+    titleKey: "folder_laminate",
     preview: "previews/laminate-preview.png",
     images: [
       "gallery/laminate/laminate (1).jpg"
@@ -1370,7 +1348,7 @@ const foldersDiv = document.getElementById("folders");
 const imagesDiv  = document.getElementById("images");
 const backBtn    = document.getElementById("backBtn");
 const titleEl    = document.getElementById("gallery-title");
-const brandLink  = document.getElementById("brandLink");
+const worksLead  = document.getElementById("works-lead");
 
 const lightbox    = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
@@ -1388,57 +1366,48 @@ let lightboxPushed = false;
    RENDER FOLDERS
 ========================= */
 function renderFolders(){
-  foldersDiv.innerHTML = Object.entries(folders).map(([key, obj], idx) => `
-    <div class="folder-card" style="--i:${idx}" onclick="openFolderClick(this,'${key}')" data-folder-key="${key}">
-      <div class="folder-thumb">
-        <img src="${obj.preview}" alt="${obj.title.en} preview">
-      </div>
-      <div class="folder-bar">
-        <div class="folder-left">
-          <svg class="folder-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M3 7.5C3 6.12 4.12 5 5.5 5H9.2c.54 0 1.06.21 1.44.59l1.1 1.1c.38.38.9.59 1.44.59H18.5C19.88 7.28 21 8.4 21 9.78V17.5C21 18.88 19.88 20 18.5 20H5.5C4.12 20 3 18.88 3 17.5V7.5Z"
-                  stroke="rgba(255,255,255,0.9)" stroke-width="1.5"/>
-          </svg>
-          <div class="folder-title" data-folder-title="${key}">${obj.title[currentLang]}</div>
-        </div>
-        <div class="folder-cta" data-folder-open>${t("ui.open")}</div>
-      </div>
-    </div>
-  `).join("");
-}
+  const openText = i18n[currentLang]?.open || "OPEN";
 
-function updateFolderCardTexts(){
-  document.querySelectorAll("[data-folder-title]").forEach(el => {
-    const key = el.getAttribute("data-folder-title");
-    if (folders[key]) el.textContent = folders[key].title[currentLang];
-  });
-  document.querySelectorAll("[data-folder-open]").forEach(el => {
-    el.textContent = t("ui.open");
-  });
+  foldersDiv.innerHTML = Object.entries(folders).map(([key, obj], idx) => {
+    const title = i18n[currentLang]?.[obj.titleKey] || key;
+    return `
+      <div class="folder-card" style="--i:${idx}" onclick="openFolderClick(this,'${key}')">
+        <div class="folder-thumb">
+          <img src="${obj.preview}" alt="${title} preview">
+        </div>
+        <div class="folder-bar">
+          <div class="folder-left">
+            <svg class="folder-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 7.5C3 6.12 4.12 5 5.5 5H9.2c.54 0 1.06.21 1.44.59l1.1 1.1c.38.38.9.59 1.44.59H18.5C19.88 7.28 21 8.4 21 9.78V17.5C21 18.88 19.88 20 18.5 20H5.5C4.12 20 3 18.88 3 17.5V7.5Z"
+                    stroke="rgba(255,255,255,0.9)" stroke-width="1.5"/>
+            </svg>
+            <div class="folder-title">${title.toUpperCase()}</div>
+          </div>
+          <div class="folder-cta">${openText}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
 }
 
 /* =========================
    UI: HOME / FOLDER
 ========================= */
-function setGalleryMode(on){
-  document.body.classList.toggle("gallery-mode", on);
-
-  // Brand click: if in gallery mode -> go back to works
-  if (on) brandLink.setAttribute("href", "#works");
-  else brandLink.setAttribute("href", "#top");
-}
-
 function showHome(){
   currentFolderKey = null;
   currentList = [];
   currentIndex = 0;
 
-  setGalleryMode(false);
+  document.body.classList.remove("in-gallery");
 
   foldersDiv.style.display = "grid";
   imagesDiv.style.display  = "none";
   backBtn.style.display    = "none";
-  titleEl.textContent      = t("works.title");
+
+  titleEl.textContent      = i18n[currentLang]?.works_title || "Our works";
+  worksLead.style.display  = "";
+  worksLead.innerHTML      = i18n[currentLang]?.works_lead || worksLead.textContent;
+
   imagesDiv.innerHTML      = "";
 }
 
@@ -1449,12 +1418,18 @@ function showFolderUI(key){
   currentFolderKey = key;
   currentList = f.images.slice();
 
-  setGalleryMode(true);
+  document.body.classList.add("in-gallery");
 
   foldersDiv.style.display = "none";
   imagesDiv.style.display  = "grid";
   backBtn.style.display    = "inline-block";
-  titleEl.textContent      = f.title[currentLang];
+  backBtn.textContent      = i18n[currentLang]?.back_btn || "← Back";
+
+  const folderTitle = i18n[currentLang]?.[f.titleKey] || f.titleKey;
+  titleEl.textContent = folderTitle.toUpperCase();
+
+  // optional: hide lead text when inside a folder (cleaner “separate tab” feel)
+  worksLead.style.display = "none";
 
   imagesDiv.innerHTML = "";
   f.images.forEach((src, idx) => {
@@ -1465,8 +1440,8 @@ function showFolderUI(key){
     imagesDiv.appendChild(d);
   });
 
-  // make it feel like separate tab: jump to top
-  window.scrollTo({ top: 0, behavior: "auto" });
+  // go to top when entering folder
+  window.scrollTo({ top: 0, behavior: "instant" });
 }
 
 /* =========================
@@ -1488,17 +1463,24 @@ function goBack(){
   location.hash = "works";
 }
 
-function handleRoute(){
+function handleRoute(fromI18n = false){
   const key = (location.hash || "").replace("#", "");
 
   if (key && folders[key]) {
     showFolderUI(key);
   } else {
+    // if user navigates to #works/#faq/... keep normal site
     showHome();
+
+    // if coming from i18n update, don't fight scroll
+    if (!fromI18n && key) {
+      const target = document.getElementById(key);
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
 }
 
-window.addEventListener("hashchange", handleRoute);
+window.addEventListener("hashchange", () => handleRoute(false));
 
 /* =========================
    LIGHTBOX + COUNTER
@@ -1606,42 +1588,17 @@ window.addEventListener("popstate", () => {
    INIT
 ========================= */
 renderFolders();
-handleRoute();
-applyI18n();
+applyI18n("en");
+handleRoute(false);
 
 /* =========================
-   Language buttons (desktop + mobile)
+   Language toggle
 ========================= */
-function setLang(lang){
-  currentLang = lang;
-  // desktop pills
-  document.querySelectorAll("[data-lang-btn]").forEach(b => {
-    b.classList.toggle("active", b.getAttribute("data-lang-btn") === lang);
+document.querySelectorAll("[data-setlang]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const lang = btn.getAttribute("data-setlang");
+    applyI18n(lang);
   });
-  // mobile buttons
-  document.querySelectorAll(".mobile-lang [data-lang]").forEach(b => {
-    b.classList.toggle("active", b.getAttribute("data-lang") === lang);
-  });
-
-  // Trustpilot locale switch (optional): keep widget locale aligned
-  // Trustpilot "data-locale" can be changed but widget may need reload.
-  // We'll update attribute and re-invoke bootstrap if available.
-  const w = document.querySelector("#reviews .trustpilot-widget");
-  if (w) {
-    w.setAttribute("data-locale", lang === "nl" ? "nl-NL" : "en-US");
-    if (window.Trustpilot && window.Trustpilot.loadFromElement) {
-      window.Trustpilot.loadFromElement(w, true);
-    }
-  }
-
-  applyI18n();
-}
-
-document.querySelectorAll("[data-lang-btn]").forEach(btn => {
-  btn.addEventListener("click", () => setLang(btn.getAttribute("data-lang-btn")));
-});
-document.querySelectorAll(".mobile-lang [data-lang]").forEach(btn => {
-  btn.addEventListener("click", () => setLang(btn.getAttribute("data-lang")));
 });
 
 /* =========================
@@ -1679,6 +1636,15 @@ if (burger && mobileMenu){
     if (e.key === "Escape") setMenu(false);
   });
 }
+
+/* If user clicks logo while in-gallery, go back to home */
+document.querySelectorAll("[data-navhome]").forEach(a => {
+  a.addEventListener("click", () => {
+    if (document.body.classList.contains("in-gallery")) {
+      location.hash = "top";
+    }
+  });
+});
 </script>
 
 </body>
